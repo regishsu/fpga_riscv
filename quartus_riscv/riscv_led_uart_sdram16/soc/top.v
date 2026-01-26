@@ -1,7 +1,6 @@
 /*
 
  2026-01-23 add ALTPLL
- 1-24 SDRAM-16bit Ok
 
 */
 
@@ -72,6 +71,14 @@ module top (
 		wire			sdram_ready;
 		wire			uart_ready;
 		
+		wire clk_sys;    // 50MHz, 0 deg (內部邏輯用)
+		wire clk_sdram;  // 50MHz, -3ns (外部晶片用)
+		wire pll_locked; // 指示 PLL 是否穩定
+		
+		wire [15:0] sdram_data_out; // 晶片是 16-bit
+		wire sdram_busy;
+		wire sdram_rd_ready;
+	
 		
 		// --- 位址解碼 (Address Decoding) ---
 		// RAM 範圍: 0x0000_0000 ~ 0x0000_1FFF (8KB)
@@ -94,6 +101,14 @@ module top (
 		wire is_ram = mem_valid && (mem_addr[31:24] == PROGADDR_RESET);
 		wire is_led = mem_valid && (mem_addr[31:24] == 8'h01);
 		wire is_sdram = mem_valid && (mem_addr[31:24] == 8'h04);  //0400_0000
+		
+		//各模組的 Ready 訊號
+		always @(posedge clk_sys) ram_ready <= (mem_valid && is_ram) && !ram_ready;
+		assign uart_ready = simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait;
+		assign led_ready = is_led;
+		//assign sdram_ready = (|mem_wstrb) ? !sdram_busy : sdram_rd_ready;
+		assign sdram_ready = (mem_valid && is_sdram) && !sdram_busy;
+		
 		// SDRAM固定輸出訊號
 		//assign dram_cke = 1'b1;        // 通常固定為高電位
 		//assign dram_cs_n = 1'b0;       // 通常固定選中 (Low Active)
@@ -105,15 +120,8 @@ module top (
 		assign mem_rdata = ram_ready ? ram_rdata :
 									sdram_ready ? sdram_rdata :
 									simpleuart_reg_div_sel ? simpleuart_reg_div_do :
-									//simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
+									simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
 									uart_ready ? simpleuart_reg_dat_do : 32'h 0000_0000;
-	
-		//各模組的 Ready 訊號
-		always @(posedge clk_sys) ram_ready <= (mem_valid && is_ram) && !ram_ready;
-		assign uart_ready = simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait;
-		assign led_ready = is_led;
-		//assign sdram_ready = (|mem_wstrb) ? !sdram_busy : sdram_rd_ready;
-		assign sdram_ready = (mem_valid && is_sdram) && !sdram_busy;
 		
 		//assign led1 = !spimem_ready; // 熄滅代表已完成應答
 		assign led2 = !uart_ready; // 亮代表觸發中
@@ -130,9 +138,6 @@ module top (
 		  ========================================================== */
 		
 		// --- PLL 實例化 ---
-		wire clk_sys;    // 50MHz, 0 deg (內部邏輯用)
-		wire clk_sdram;  // 50MHz, -3ns (外部晶片用)
-		wire pll_locked; // 指示 PLL 是否穩定
 		
 		my_pll pll_inst (
 			 .inclk0 (clk),        // 接板子上的 50MHz 晶振
@@ -278,10 +283,7 @@ module top (
 	);
 	
 	// --- 實例SDRAM控制器 ---
-// 內部中間訊號
-    wire [15:0] sdram_data_out; // 晶片是 16-bit
-    wire sdram_busy;
-    wire sdram_rd_ready;
+	// 內部中間訊號
 
     // --- 實例化 GitHub 版 SDRAM 控制器 ---
     sdram_controller #(

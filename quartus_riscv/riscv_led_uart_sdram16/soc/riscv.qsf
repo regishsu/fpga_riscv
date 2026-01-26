@@ -169,15 +169,11 @@ set_location_assignment PIN_115 -to ser_rx
 set_location_assignment PIN_114 -to ser_tx
 set_global_assignment -name VERILOG_FILE sdram_controller.v
 set_global_assignment -name VERILOG_FILE simpleuart.v
-set_global_assignment -name VERILOG_FILE spimemio.v
 set_global_assignment -name VERILOG_FILE top.v
 set_global_assignment -name VERILOG_FILE tb.v
 set_global_assignment -name VERILOG_FILE picorv32.v
 set_global_assignment -name QIP_FILE my_ram_ip.qip
-set_global_assignment -name VERILOG_FILE sd_card_spi_lite.v
 set_global_assignment -name SIGNALTAP_FILE stp1.stp
-set_global_assignment -name VERILOG_FILE spi_flash_controller.v
-set_global_assignment -name VERILOG_FILE spi_bus_wrapper.v
 set_global_assignment -name QIP_FILE my_pll.qip
 set_location_assignment PIN_59 -to dram_addr[11]
 set_location_assignment PIN_75 -to dram_addr[10]

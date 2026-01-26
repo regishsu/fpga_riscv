@@ -1,4 +1,4 @@
-<session jtag_chain="USB-Blaster(Altera) [2-2.2]" jtag_device="@1: 10CL006(Y|Z)/10CL010(Y|Z)/.. (0x020F10DD)" sof_file="">
+<session jtag_chain="USB-BlasterII [USB-1]" jtag_device="@1: 10CL006(Y|Z)/10CL010(Y|Z)/.. (0x020F10DD)" sof_file="">
   <display_tree gui_logging_enabled="0">
     <display_branch instance="auto_signaltap_0" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
@@ -32,7 +32,7 @@
         <trigger_in_editor is_enabled="true" node_name="led1"/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="7595C6E5" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2026/01/20 18:01:48  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="high" trigger_type="circular">
+      <trigger CRC="7595C6E5" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2026/01/20 18:01:48  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="high"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">
@@ -91,7 +91,8 @@
     <single attribute="instance widget visible" value="1"/>
     <single attribute="jtag widget visible" value="1"/>
     <single attribute="lock mode" value="0"/>
-    <multi attribute="frame size" size="2" value="1130,856"/>
-    <multi attribute="jtag widget size" size="2" value="344,124"/>
+    <multi attribute="frame size" size="2" value="1019,548"/>
+    <multi attribute="jtag widget size" size="2" value="344,119"/>
+    <single attribute="sof manager visible" value="0"/>
   </global_info>
 </session>

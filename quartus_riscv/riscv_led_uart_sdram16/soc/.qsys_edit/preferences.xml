@@ -3,11 +3,10 @@
  <debug showDebugMenu="0" />
  <systemtable filter="All Interfaces">
   <columns>
-   <connections preferredWidth="95" />
+   <connections preferredWidth="47" />
    <irq preferredWidth="34" />
   </columns>
  </systemtable>
- <library
-   expandedCategories="Library/Memory Interfaces and Controllers,Library/University Program/Clock,Library/University Program/Memory,Library/Memory Interfaces and Controllers/Memory Interfaces with UniPHY,Library/University Program/Audio &amp; Video,Library/Qsys Interconnect,Library/University Program,Project,Library,Library/University Program/Generic IO,Library/University Program/Communications,Library/Memory Interfaces and Controllers/Memory Interfaces with AltMemPHY" />
- <window width="1070" height="800" x="113" y="251" />
+ <library expandedCategories="Library,Project" />
+ <window width="1070" height="800" x="113" y="208" />
 </preferences>
