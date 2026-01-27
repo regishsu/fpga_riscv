@@ -120,7 +120,7 @@ module top (
 		assign mem_rdata = ram_ready ? ram_rdata :
 									sdram_ready ? sdram_rdata :
 									simpleuart_reg_div_sel ? simpleuart_reg_div_do :
-									simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
+									//simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
 									uart_ready ? simpleuart_reg_dat_do : 32'h 0000_0000;
 		
 		//assign led1 = !spimem_ready; // 熄滅代表已完成應答
