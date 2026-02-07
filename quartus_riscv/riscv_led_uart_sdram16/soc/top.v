@@ -269,7 +269,7 @@ module top (
 		//實例化 uart 
 		simpleuart simpleuart (
 		.clk         (clk_sys   ),
-		.resetn      (reset_n   ),
+		.resetn      (cpu_resetn   ),
 		.ser_tx      (ser_tx    ),
 		.ser_rx      (ser_rx    ),
 		.reg_div_we  (simpleuart_reg_div_sel ? mem_wstrb : 4'b0000),
