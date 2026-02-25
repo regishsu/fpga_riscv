@@ -103,11 +103,14 @@ module top (
 		wire is_sdram = mem_valid && (mem_addr[31:24] == 8'h04);  //0400_0000
 		
 		//各模組的 Ready 訊號
-		always @(posedge clk_sys) ram_ready <= (mem_valid && is_ram) && !ram_ready;
+		//always @(posedge clk_sys) ram_ready <= (mem_valid && is_ram) && !ram_ready;
+		always @(posedge clk_sys) ram_ready <= is_ram && !ram_ready;
 		assign uart_ready = simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait;
 		assign led_ready = is_led;
-		//assign sdram_ready = (|mem_wstrb) ? !sdram_busy : sdram_rd_ready;
-		assign sdram_ready = (mem_valid && is_sdram) && !sdram_busy;
+		
+		assign sdram_ready = is_sdram &&((|mem_wstrb) ? !sdram_busy : sdram_rd_ready);
+		//assign sdram_ready = (mem_valid && is_sdram) && !sdram_busy;
+		//assign sdram_ready = is_sdram && !sdram_busy;  //bug: shift 1 word
 		
 		// SDRAM固定輸出訊號
 		//assign dram_cke = 1'b1;        // 通常固定為高電位
@@ -115,10 +118,12 @@ module top (
 		assign dram_clk = clk_sdram;   // 接 PLL c1 (-3ns), 外部 SDRAM 晶片的時鐘
 										
 		assign mem_ready = sdram_ready || 
+									//!sdram_busy || 
 									ram_ready || led_ready || simpleuart_reg_div_sel || uart_ready;
 	
 		assign mem_rdata = ram_ready ? ram_rdata :
 									sdram_ready ? sdram_rdata :
+									//sdram_rd_ready ? sdram_rdata :
 									simpleuart_reg_div_sel ? simpleuart_reg_div_do :
 									//simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
 									uart_ready ? simpleuart_reg_dat_do : 32'h 0000_0000;
@@ -291,7 +296,7 @@ module top (
         .COL_WIDTH(8),           // HY57V641620 規格
         .BANK_WIDTH(2),
 		  .CLK_FREQUENCY(50),      // 你的 PLL 輸出頻率
-		  .REFRESH_TIME(65),
+		  .REFRESH_TIME(64),
 		  .REFRESH_COUNT(4096)
     ) sdram_inst (
         /* HOST INTERFACE */
