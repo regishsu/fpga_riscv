@@ -295,7 +295,8 @@ module top (
         .ROW_WIDTH(12),          // HY57V641620 規格
         .COL_WIDTH(8),           // HY57V641620 規格
         .BANK_WIDTH(2),
-		  .CLK_FREQUENCY(50),      // 你的 PLL 輸出頻率
+		  //.CLK_FREQUENCY(50),      // 你的 PLL 輸出頻率
+		  .CLK_FREQUENCY(100),      // SDRAM PLL 輸出頻率, check PLL-C1 output
 		  .REFRESH_TIME(64),
 		  .REFRESH_COUNT(4096)
     ) sdram_inst (

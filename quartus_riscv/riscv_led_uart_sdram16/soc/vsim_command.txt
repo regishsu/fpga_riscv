@@ -9,6 +9,19 @@ add wave -position insertpoint sim:/tb/uut/is_led
 add wave -position insertpoint sim:/tb/uut/cpu/mem_wstrb
 add wave -position insertpoint sim:/tb/uut/trap
 
+
+# SDRAM
+add wave -position insertpoint sim:/tb/uut/cpu/mem_valid
+add wave -position insertpoint sim:/tb/uut/cpu/mem_ready
+add wave -position insertpoint sim:/tb/uut/cpu/mem_rdata
+add wave -position insertpoint sim:/tb/uut/cpu/mem_addr
+add wave -position insertpoint sim:/tb/uut/is_sdram
+add wave -position insertpoint sim:/tb/uut/sdram_inst/rd_ready
+add wave -position insertpoint sim:/tb/uut/sdram_inst/state
+add wave -position insertpoint sim:/tb/uut/sdram_inst/rd_enable
+add wave -position insertpoint sim:/tb/uut/sdram_inst/rd_addr
+
+
 restart -f
 run 1us
 

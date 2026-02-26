@@ -272,6 +272,10 @@ begin
      end
 end
 
+
+reg rd_enable_prev;
+always @(posedge clk) rd_enable_prev <= rd_enable;
+
 // Next state logic
 always @*
 begin
@@ -284,7 +288,8 @@ begin
           next = REF_PRE;
           command_nxt = CMD_PALL;
           end
-        else if (rd_enable)
+        //else if (rd_enable)
+		  else if (rd_enable && !rd_enable_prev) // 僅在 rd_enable 從 0 變 1 時觸發
           begin
           next = READ_ACT;
           command_nxt = CMD_BACT;

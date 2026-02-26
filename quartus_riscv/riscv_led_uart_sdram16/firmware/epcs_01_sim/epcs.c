@@ -10,10 +10,14 @@
 #include <stdbool.h>
 
 // 定義硬體暫存器位址
+#define SDRAM_BASE_ADDR 0x04000000
+
 #define reg_leds  (*(volatile unsigned int*)0x01000000)
 #define reg_spictrl   (*(volatile unsigned int*)0x02000000) // Flash 映射起始點
 #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
 #define reg_uart_data (*(volatile uint32_t*)0x02000008)
+#define reg_sdramctrl (*(volatile uint32_t*)0x04000000)
+
 
 // 七段顯示器編碼表 (共陽極或共陰極請根據你的硬體調整)
 // 這裡假設是之前的編碼：0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
@@ -154,10 +158,65 @@ void cmd_echo()
 		putchar(c);
 }
 
+uint32_t sdram_test(uint32_t addr, uint32_t size) {
+    volatile uint32_t *sdram_ptr = (volatile uint32_t *)addr;
+    uint32_t words = size / sizeof(uint32_t); // 換算成 32-bit 字數
+    uint32_t c;
+
+	// 1. 寫入測試階段
+	print("Writing..\n");
+    for (uint32_t i = 0; i < words; i++) {
+    	c = i*4;;
+        sdram_ptr[i] = c;
+        print("W: ");
+        print_hex((uint32_t)&sdram_ptr[i],8);
+        print(" = ");
+		print_hex(c,8);
+		print("\n");
+	}
+    // 2. 驗證讀取階段
+	print("Reading..\n");
+	for (uint32_t i = 0; i < words; i++) {
+        c = sdram_ptr[i];
+        print("R: ");
+        print_hex((uint32_t)&sdram_ptr[i],8);
+		print(" = ");
+		print_hex(c,8);
+		print("\n");
+    }
+
+    return 0; // 測試成功
+}
+
+uint32_t sdram_test_x(uint32_t addr, uint32_t size) {
+    volatile uint32_t *sdram_ptr = (volatile uint32_t *)addr;
+    uint32_t words = size / sizeof(uint32_t); // 換算成 32-bit 字數
+    uint32_t c;
+
+	// 1. 寫入測試階段
+	//print("SDRAM Write & Read....\n");
+	//print("Writing..\n");
+    for (uint32_t i = 0; i < words; i++) {
+    	c = i*4;;
+        sdram_ptr[i] = c;
+	}
+    // 2. 驗證讀取階段
+	//print("Reading..\n");
+	for (uint32_t i = 0; i < words; i++) {
+        c = sdram_ptr[i];
+        //if (c != i*4) 
+        //	print("Error! ");
+    }
+    return 0; // 測試成功
+}
+
 // real delay: 5000000
 // simulation:5
 #define DELAY 5
 int main() {
+	int err;
+	err = sdram_test_x(SDRAM_BASE_ADDR,64);
+	
 	delay(DELAY);
 	
 	reg_uart_clkdiv = 434; //50MHz時鐘，想要 115200 bps：50,000,000/115,200 = 434
@@ -176,6 +235,10 @@ int main() {
 		display_7segs(0xCDEF);
 		print("0xCDEF..\n");
 		delay(DELAY);
+		
+		print("\nSDRAM Testing..\n");
+		err = sdram_test(SDRAM_BASE_ADDR,8192);
+		
 		print("Return..\n");		
 	}
     return 0;

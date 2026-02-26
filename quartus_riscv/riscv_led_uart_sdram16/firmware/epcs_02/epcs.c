@@ -285,8 +285,8 @@ int main() {
 		display_7segs(0xCDEF);
 		print("0xCDEF..\n");
 		delay(DELAY);
-		print("\nSDRAM..\n");
 		
+		print("\nSDRAM Testing..\n");
 		err = sdram_test(SDRAM_BASE_ADDR,10240);
 		if (!err) 
 			print("\n  OK..\n");

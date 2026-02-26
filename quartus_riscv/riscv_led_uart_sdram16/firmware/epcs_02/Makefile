@@ -12,8 +12,8 @@ OBJS   = start.o epcs.o
 LDS    = sections.lds
 
 # --- 編譯參數 ---
-CFLAGS  = -march=rv32i -mabi=ilp32 -O2 -ffreestanding -Wall
-LDFLAGS = -march=rv32i -mabi=ilp32 -nostdlib -Wl,-T,$(LDS)
+CFLAGS  = -march=rv32ic -mabi=ilp32 -O2 -ffreestanding -Wall
+LDFLAGS = -march=rv32ic -mabi=ilp32 -nostdlib -Wl,-T,$(LDS)
 
 # --- 生成目標 ---
 # 新增 $(TARGET).mif 到 all 中
